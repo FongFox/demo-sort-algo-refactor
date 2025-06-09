@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import com.nhs2304.demosortalgo.HistoryEntry;
+import com.nhs2304.demosortalgo.AlgorithmResources;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,62 +72,7 @@ public class SortVisualizer extends Application {
         launch();
     }
 
-    /// === History Entry DTO ===
 
-    public static class HistoryEntry {
-        private final SimpleStringProperty algorithm;
-        private final SimpleStringProperty inputArray;
-        private final SimpleStringProperty outputArray;
-        private final SimpleStringProperty startTime;
-        private final SimpleStringProperty formattedDuration;
-        private final SimpleIntegerProperty swapCount;
-
-        private final SimpleIntegerProperty iValue;
-
-        public HistoryEntry(String algorithm, String inputArray, String outputArray, long durationMillis, int swapCount, String startTime, int iValue) {
-            this.algorithm = new SimpleStringProperty(algorithm);
-            this.inputArray = new SimpleStringProperty(inputArray);
-            this.outputArray = new SimpleStringProperty(outputArray);
-            this.formattedDuration = new SimpleStringProperty(formatDuration(durationMillis));
-            this.swapCount = new SimpleIntegerProperty(swapCount);
-            this.startTime = new SimpleStringProperty(startTime);
-            this.iValue = new SimpleIntegerProperty(iValue);
-        }
-
-        public int getIValue() {
-            return iValue.get();
-        }
-
-        public String getAlgorithm() {
-            return algorithm.get();
-        }
-
-        public String getInputArray() {
-            return inputArray.get();
-        }
-
-        public String getOutputArray() {
-            return outputArray.get();
-        }
-
-        public String getStartTime() {
-            return startTime.get();
-        }
-
-        public String getFormattedDuration() {
-            return formattedDuration.get();
-        }
-
-        public int getSwapCount() {
-            return swapCount.get();
-        }
-
-        private static String formatDuration(long millis) {
-            long seconds = millis / 1000;
-            long ms = millis % 1000;
-            return seconds + "s " + ms + "ms";
-        }
-    }
 
     /// === Sort Step DTO ===
     private static class SortStep {
@@ -157,103 +102,7 @@ public class SortVisualizer extends Application {
 
     /// === PseudoCode & Info Fetching ===
 
-    private String getPseudoCode(String algo) {
-        return switch (algo) {
-            case "Bubble Sort" -> """
-                    for (int i = 0; i < n - 1; i++) {
-                        for (int j = 0; j < n - i - 1; j++) {
-                            if (arr[j] > arr[j + 1]) {
-                                swap(arr[j], arr[j + 1]);
-                            }
-                        }
-                    }
-                    """;
-
-            case "Selection Sort" -> """
-                    for (int i = 0; i < n - 1; i++) {
-                        int min = i;
-                        for (int j = i + 1; j < n; j++) {
-                            if (arr[j] < arr[min]) {
-                                min = j;
-                            }
-                        }
-                        swap(arr[i], arr[min]);
-                    }
-                    """;
-            case "Quick Sort" -> """
-                    quickSort(arr[], low, high):
-                        if (low < high):
-                            pi = partition(arr, low, high)
-                            quickSort(arr, low, pi - 1)
-                            quickSort(arr, pi + 1, high)
-                    
-                    partition(arr[], low, high):
-                        pivot = arr[high]
-                        i = low - 1
-                        for j = low to high-1:
-                            if arr[j] < pivot:
-                                i++
-                                swap arr[i] with arr[j]
-                        swap arr[i+1] with arr[high]
-                        return (i + 1)
-                    """;
-            default -> "Thông tin chưa có.";
-        };
-    }
-
-    private String getAlgorithmInfo(String algorithm) {
-        return switch (algorithm) {
-            case "Bubble Sort" -> """
-                    ➔ Bubble Sort
-                    - Người phát triển: Edward F. Moore (~1950)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n²)
-                      + Tệ nhất: O(n²)
-                      + Tốt nhất: O(n) (khi dãy đã sorted)
-                    - Độ phức tạp bộ nhớ: O(1) (in-place sorting)
-                    - Tính chất:
-                      + Ổn định (stable sort: YES)
-                      + So sánh cặp kề và hoán đổi nếu sai thứ tự.
-                    - Ứng dụng:
-                      + Dạy sorting cơ bản.
-                      + Tình huống mảng nhỏ hoặc đã gần sorted.
-                    """;
-
-            case "Selection Sort" -> """
-                    ➔ Selection Sort
-                    - Người phát triển: Donald Shell (~1950s)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n²)
-                      + Tệ nhất: O(n²)
-                      + Tốt nhất: O(n²)
-                    - Độ phức tạp bộ nhớ: O(1) (in-place sorting)
-                    - Tính chất:
-                      + Không ổn định (stable sort: NO)
-                      + Tìm phần tử nhỏ nhất và đưa lên đầu.
-                    - Ứng dụng:
-                      + Dùng trong môi trường bộ nhớ giới hạn.
-                      + Dạy thuật toán cơ bản.
-                    """;
-            case "Quick Sort" -> """
-                    ➔ Quick Sort
-                    - Người phát triển: Tony Hoare (1960)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n log n)
-                      + Tệ nhất: O(n²) (nếu chọn pivot không tốt)
-                      + Tốt nhất: O(n log n)
-                    - Độ phức tạp bộ nhớ: O(log n) (stack recursion)
-                    - Tính chất:
-                      + Không ổn định (stable sort: NO)
-                      + Chia để trị: chọn pivot, chia mảng thành 2 phần nhỏ hơn và lớn hơn pivot.
-                      + Hiệu quả cao với mảng lớn, nhưng dễ bị O(n²) nếu pivot không cân bằng.
-                    - Ứng dụng:
-                      + Sorting cực nhanh trên các hệ thống thực tế.
-                      + Được dùng làm chuẩn sorting trong nhiều thư viện chuẩn (ví dụ Java, C++ STL, Python).
-                    """;
-
-            default -> "Thông tin chưa có.";
-        };
-    }
+    // Delegated to AlgorithmResources for cleaner code
 
     /// === Utility Methods ===
 
@@ -596,8 +445,8 @@ public class SortVisualizer extends Application {
         algoCombo.getItems().addAll("Bubble Sort", "Selection Sort", "Quick Sort");
         algoCombo.setValue("Bubble Sort");
         algoCombo.setOnAction(e -> {
-            pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-            algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+            pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+            algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
             stepMode = false; // 🛡️ reset step-by-step mode khi đổi thuật toán
         });
 
@@ -776,8 +625,8 @@ public class SortVisualizer extends Application {
                 isPaused = false;
                 updateStatus("Running");
                 loadingIndicator.setVisible(true);
-                pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-                algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+                pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+                algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
 
                 int[] original = array.clone();
                 long startTimeMillis = System.currentTimeMillis();
@@ -878,8 +727,8 @@ public class SortVisualizer extends Application {
                     }
                     default -> StepModeAlgorithm.NONE;
                 };
-                pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-                algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+                pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+                algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
 
                 updateStatus("Step-by-step started");
             } else {
