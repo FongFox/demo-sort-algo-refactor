@@ -16,4 +16,6 @@ module com.nhs2304.demosortalgo {
     exports com.nhs2304.demosortalgo;
     exports com.nhs2304.demosortalgo.model;
     opens com.nhs2304.demosortalgo.model to javafx.fxml;
+    exports com.nhs2304.demosortalgo.hello;
+    opens com.nhs2304.demosortalgo.hello to javafx.fxml;
 }

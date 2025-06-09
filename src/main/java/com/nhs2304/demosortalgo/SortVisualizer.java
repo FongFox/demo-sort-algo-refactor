@@ -3,36 +3,32 @@
 package com.nhs2304.demosortalgo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.nhs2304.demosortalgo.helper.AlgorithmResources;
 import com.nhs2304.demosortalgo.model.HistoryEntry;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.geometry.Pos;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import java.time.LocalTime;
-import javafx.geometry.Insets;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.concurrent.atomic.AtomicInteger;
-import javafx.util.StringConverter;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class SortVisualizer extends Application {
-
-
     private int lastIValue = -1;
     private int[] array;
     private int swapCount = 0;
@@ -57,7 +53,9 @@ public class SortVisualizer extends Application {
     private TableView<HistoryEntry> historyView = new TableView<>();
     private List<HistoryEntry> historyList = new ArrayList<>();
     private volatile boolean isPaused = false;
-    private enum StepModeAlgorithm { NONE, BUBBLE, SELECTION, QUICK }
+
+    private enum StepModeAlgorithm {NONE, BUBBLE, SELECTION, QUICK}
+
     private StepModeAlgorithm stepAlgo = StepModeAlgorithm.NONE;
     private volatile boolean isStopped = false;
     private TextArea algorithmInfoArea;
@@ -92,106 +90,6 @@ public class SortVisualizer extends Application {
         int getLine() {
             return line;
         }
-    }
-
-    /// === PseudoCode & Info Fetching ===
-
-    private String getPseudoCode(String algo) {
-        return switch (algo) {
-            case "Bubble Sort" -> """
-                    for (int i = 0; i < n - 1; i++) {
-                        for (int j = 0; j < n - i - 1; j++) {
-                            if (arr[j] > arr[j + 1]) {
-                                swap(arr[j], arr[j + 1]);
-                            }
-                        }
-                    }
-                    """;
-
-            case "Selection Sort" -> """
-                    for (int i = 0; i < n - 1; i++) {
-                        int min = i;
-                        for (int j = i + 1; j < n; j++) {
-                            if (arr[j] < arr[min]) {
-                                min = j;
-                            }
-                        }
-                        swap(arr[i], arr[min]);
-                    }
-                    """;
-            case "Quick Sort" -> """
-                    quickSort(arr[], low, high):
-                        if (low < high):
-                            pi = partition(arr, low, high)
-                            quickSort(arr, low, pi - 1)
-                            quickSort(arr, pi + 1, high)
-                    
-                    partition(arr[], low, high):
-                        pivot = arr[high]
-                        i = low - 1
-                        for j = low to high-1:
-                            if arr[j] < pivot:
-                                i++
-                                swap arr[i] with arr[j]
-                        swap arr[i+1] with arr[high]
-                        return (i + 1)
-                    """;
-            default -> "Thông tin chưa có.";
-        };
-    }
-
-    private String getAlgorithmInfo(String algorithm) {
-        return switch (algorithm) {
-            case "Bubble Sort" -> """
-                    ➔ Bubble Sort
-                    - Người phát triển: Edward F. Moore (~1950)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n²)
-                      + Tệ nhất: O(n²)
-                      + Tốt nhất: O(n) (khi dãy đã sorted)
-                    - Độ phức tạp bộ nhớ: O(1) (in-place sorting)
-                    - Tính chất:
-                      + Ổn định (stable sort: YES)
-                      + So sánh cặp kề và hoán đổi nếu sai thứ tự.
-                    - Ứng dụng:
-                      + Dạy sorting cơ bản.
-                      + Tình huống mảng nhỏ hoặc đã gần sorted.
-                    """;
-
-            case "Selection Sort" -> """
-                    ➔ Selection Sort
-                    - Người phát triển: Donald Shell (~1950s)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n²)
-                      + Tệ nhất: O(n²)
-                      + Tốt nhất: O(n²)
-                    - Độ phức tạp bộ nhớ: O(1) (in-place sorting)
-                    - Tính chất:
-                      + Không ổn định (stable sort: NO)
-                      + Tìm phần tử nhỏ nhất và đưa lên đầu.
-                    - Ứng dụng:
-                      + Dùng trong môi trường bộ nhớ giới hạn.
-                      + Dạy thuật toán cơ bản.
-                    """;
-            case "Quick Sort" -> """
-                    ➔ Quick Sort
-                    - Người phát triển: Tony Hoare (1960)
-                    - Độ phức tạp thời gian:
-                      + Trung bình: O(n log n)
-                      + Tệ nhất: O(n²) (nếu chọn pivot không tốt)
-                      + Tốt nhất: O(n log n)
-                    - Độ phức tạp bộ nhớ: O(log n) (stack recursion)
-                    - Tính chất:
-                      + Không ổn định (stable sort: NO)
-                      + Chia để trị: chọn pivot, chia mảng thành 2 phần nhỏ hơn và lớn hơn pivot.
-                      + Hiệu quả cao với mảng lớn, nhưng dễ bị O(n²) nếu pivot không cân bằng.
-                    - Ứng dụng:
-                      + Sorting cực nhanh trên các hệ thống thực tế.
-                      + Được dùng làm chuẩn sorting trong nhiều thư viện chuẩn (ví dụ Java, C++ STL, Python).
-                    """;
-
-            default -> "Thông tin chưa có.";
-        };
     }
 
     /// === Utility Methods ===
@@ -383,7 +281,6 @@ public class SortVisualizer extends Application {
         return i + 1;
     }
 
-
     /// === Undefined Method ===
     private void generateBubbleSortSteps() {
         steps.clear();
@@ -431,8 +328,6 @@ public class SortVisualizer extends Application {
         }
     }
 
-
-
     private void generateQuickSortSteps() {
         steps.clear();
         swapCount = 0;
@@ -477,8 +372,6 @@ public class SortVisualizer extends Application {
 
         return i + 1;
     }
-
-
 
     /// === JavaFX start() ===
     @Override
@@ -534,8 +427,8 @@ public class SortVisualizer extends Application {
         algoCombo.getItems().addAll("Bubble Sort", "Selection Sort", "Quick Sort");
         algoCombo.setValue("Bubble Sort");
         algoCombo.setOnAction(e -> {
-            pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-            algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+            pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+            algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
             stepMode = false; // 🛡️ reset step-by-step mode khi đổi thuật toán
         });
 
@@ -676,7 +569,8 @@ public class SortVisualizer extends Application {
 
                 stepMode = false; // 🛡️ reset step-by-step nếu nhập input mới
                 drawArray();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
 
 
@@ -714,8 +608,8 @@ public class SortVisualizer extends Application {
                 isPaused = false;
                 updateStatus("Running");
                 loadingIndicator.setVisible(true);
-                pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-                algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+                pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+                algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
 
                 int[] original = array.clone();
                 long startTimeMillis = System.currentTimeMillis();
@@ -816,8 +710,8 @@ public class SortVisualizer extends Application {
                     }
                     default -> StepModeAlgorithm.NONE;
                 };
-                pseudoCodeArea.setText(getPseudoCode(algoCombo.getValue()));
-                algorithmInfoArea.setText(getAlgorithmInfo(algoCombo.getValue()));
+                pseudoCodeArea.setText(AlgorithmResources.getPseudoCode(algoCombo.getValue()));
+                algorithmInfoArea.setText(AlgorithmResources.getAlgorithmInfo(algoCombo.getValue()));
 
                 updateStatus("Step-by-step started");
             } else {

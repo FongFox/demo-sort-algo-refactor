@@ -156,7 +156,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.nhs2304.demosortalgo/com.nhs2304.demosortalgo.HelloApplication</mainClass>
+                            <mainClass>com.nhs2304.demosortalgo/com.nhs2304.demosortalgo.hello.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

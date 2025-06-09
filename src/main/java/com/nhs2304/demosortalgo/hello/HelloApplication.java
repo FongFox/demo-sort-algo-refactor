@@ -1,4 +1,4 @@
-package com.nhs2304.demosortalgo;
+package com.nhs2304.demosortalgo.hello;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

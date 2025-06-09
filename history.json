@@ -1,9 +1,9 @@
 [ {
   "algorithm" : "Bubble Sort",
-  "inputArray" : "[96, 47, 97, 46, 16, 81, 21, 53, 52, 54]",
-  "outputArray" : "[16, 21, 46, 47, 52, 53, 54, 81, 96, 97]",
-  "startTime" : "15:18:58",
-  "formattedDuration" : "7s 339ms",
-  "swapCount" : 25,
+  "inputArray" : "[63, 96, 36, 51, 91, 90, 88, 19, 62, 55]",
+  "outputArray" : "[19, 36, 51, 55, 62, 63, 88, 90, 91, 96]",
+  "startTime" : "22:35:31",
+  "formattedDuration" : "14s 38ms",
+  "swapCount" : 28,
   "ivalue" : 8
 } ]
