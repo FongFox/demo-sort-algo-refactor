@@ -4,6 +4,7 @@ package com.nhs2304.demosortalgo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.nhs2304.demosortalgo.model.HistoryEntry;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -61,72 +62,10 @@ public class SortVisualizer extends Application {
     private volatile boolean isStopped = false;
     private TextArea algorithmInfoArea;
 
-
-
-
-
-
     /// === Entry Point ===
 
     public static void main(String[] args) {
         launch();
-    }
-
-    /// === History Entry DTO ===
-
-    public static class HistoryEntry {
-        private final SimpleStringProperty algorithm;
-        private final SimpleStringProperty inputArray;
-        private final SimpleStringProperty outputArray;
-        private final SimpleStringProperty startTime;
-        private final SimpleStringProperty formattedDuration;
-        private final SimpleIntegerProperty swapCount;
-
-        private final SimpleIntegerProperty iValue;
-
-        public HistoryEntry(String algorithm, String inputArray, String outputArray, long durationMillis, int swapCount, String startTime, int iValue) {
-            this.algorithm = new SimpleStringProperty(algorithm);
-            this.inputArray = new SimpleStringProperty(inputArray);
-            this.outputArray = new SimpleStringProperty(outputArray);
-            this.formattedDuration = new SimpleStringProperty(formatDuration(durationMillis));
-            this.swapCount = new SimpleIntegerProperty(swapCount);
-            this.startTime = new SimpleStringProperty(startTime);
-            this.iValue = new SimpleIntegerProperty(iValue);
-        }
-
-        public int getIValue() {
-            return iValue.get();
-        }
-
-        public String getAlgorithm() {
-            return algorithm.get();
-        }
-
-        public String getInputArray() {
-            return inputArray.get();
-        }
-
-        public String getOutputArray() {
-            return outputArray.get();
-        }
-
-        public String getStartTime() {
-            return startTime.get();
-        }
-
-        public String getFormattedDuration() {
-            return formattedDuration.get();
-        }
-
-        public int getSwapCount() {
-            return swapCount.get();
-        }
-
-        private static String formatDuration(long millis) {
-            long seconds = millis / 1000;
-            long ms = millis % 1000;
-            return seconds + "s " + ms + "ms";
-        }
     }
 
     /// === Sort Step DTO ===
@@ -328,7 +267,6 @@ public class SortVisualizer extends Application {
             showAlert("Save Failed", e.getMessage());
         }
     }
-
 
     /// === Sorting Algorithms ===
     private void bubbleSort() {
