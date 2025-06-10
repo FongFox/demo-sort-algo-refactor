@@ -2,7 +2,6 @@
 
 package com.nhs2304.demosortalgo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhs2304.demosortalgo.helper.AlgorithmResources;
 import com.nhs2304.demosortalgo.model.HistoryEntry;
 import com.nhs2304.demosortalgo.model.HistoryManager;
@@ -159,12 +158,7 @@ public class SortVisualizer extends Application {
     }
 
     private void saveHistoryToFile() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File("history.json"), historyList);
-        } catch (IOException e) {
-            showAlert("Save Failed", e.getMessage());
-        }
+        HistoryManager.saveHistory(HistoryManager.HISTORY_FILE, historyList);
     }
 
     /// === Sorting Algorithms ===
@@ -378,7 +372,7 @@ public class SortVisualizer extends Application {
     @Override
     public void start(Stage primaryStage) {
         // Đọc lịch sử đã lưu (nếu có)
-        historyList = HistoryManager.loadHistory("history.json");
+        historyList = HistoryManager.loadHistory(HistoryManager.HISTORY_FILE);
         historyView.getItems().addAll(historyList);
 
         Button runBtn = new Button("Run");
@@ -766,7 +760,7 @@ public class SortVisualizer extends Application {
 
         // Khi hoàn tất một lần chạy hoặc chế độ step-by-step
         // lưu lịch sử xuống file
-        HistoryManager.saveHistory("history.json", historyList);
+        HistoryManager.saveHistory(HistoryManager.HISTORY_FILE, historyList);
     }
 }
 
