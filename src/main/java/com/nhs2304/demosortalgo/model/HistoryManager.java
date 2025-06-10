@@ -12,6 +12,8 @@ import java.util.List;
  * Utility class to load and save {@link HistoryEntry} objects from JSON.
  */
 public final class HistoryManager {
+    public static final String HISTORY_FILE = "history.json";
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private HistoryManager() {
