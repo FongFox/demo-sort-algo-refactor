@@ -1,9 +1,25 @@
 [ {
   "algorithm" : "Bubble Sort",
-  "inputArray" : "[63, 96, 36, 51, 91, 90, 88, 19, 62, 55]",
-  "outputArray" : "[19, 36, 51, 55, 62, 63, 88, 90, 91, 96]",
-  "startTime" : "22:35:31",
-  "formattedDuration" : "14s 38ms",
-  "swapCount" : 28,
+  "inputArray" : "[22, 9, 20, 5, 38, 73, 74, 16, 47, 66]",
+  "outputArray" : "[5, 9, 16, 20, 22, 38, 47, 66, 73, 74]",
+  "formattedDuration" : "7s 22ms",
+  "swapCount" : 14,
+  "startTime" : "16:30:59",
+  "ivalue" : 8
+}, {
+  "algorithm" : "Selection Sort",
+  "inputArray" : "[5, 9, 16, 20, 22, 38, 47, 66, 73, 74]",
+  "outputArray" : "[5, 9, 16, 20, 22, 38, 47, 66, 73, 74]",
+  "formattedDuration" : "0s 9ms",
+  "swapCount" : 14,
+  "startTime" : "16:31:26",
+  "ivalue" : 8
+}, {
+  "algorithm" : "Selection Sort",
+  "inputArray" : "[63, 34, 37, 21, 19, 96, 33, 81, 30, 1]",
+  "outputArray" : "[1, 19, 21, 30, 33, 34, 37, 63, 81, 96]",
+  "formattedDuration" : "4s 516ms",
+  "swapCount" : 23,
+  "startTime" : "16:31:34",
   "ivalue" : 8
 } ]

@@ -5,6 +5,7 @@ package com.nhs2304.demosortalgo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhs2304.demosortalgo.helper.AlgorithmResources;
 import com.nhs2304.demosortalgo.model.HistoryEntry;
+import com.nhs2304.demosortalgo.model.HistoryManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -376,6 +377,9 @@ public class SortVisualizer extends Application {
     /// === JavaFX start() ===
     @Override
     public void start(Stage primaryStage) {
+        // Đọc lịch sử đã lưu (nếu có)
+        historyList = HistoryManager.loadHistory("history.json");
+        historyView.getItems().addAll(historyList);
 
         Button runBtn = new Button("Run");
         Button pauseBtn = new Button("Pause");
@@ -759,6 +763,10 @@ public class SortVisualizer extends Application {
                 updateStatus("Back to step " + stepIndex);
             }
         });
+
+        // Khi hoàn tất một lần chạy hoặc chế độ step-by-step
+        // lưu lịch sử xuống file
+        HistoryManager.saveHistory("history.json", historyList);
     }
 }
 

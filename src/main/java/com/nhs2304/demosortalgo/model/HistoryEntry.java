@@ -1,4 +1,7 @@
 package com.nhs2304.demosortalgo.model;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -27,6 +30,24 @@ public class HistoryEntry {
         this.inputArray = new SimpleStringProperty(inputArray);
         this.outputArray = new SimpleStringProperty(outputArray);
         this.formattedDuration = new SimpleStringProperty(formatDuration(durationMillis));
+        this.swapCount = new SimpleIntegerProperty(swapCount);
+        this.startTime = new SimpleStringProperty(startTime);
+        this.iValue = new SimpleIntegerProperty(iValue);
+    }
+
+    @JsonCreator
+    public HistoryEntry(
+            @JsonProperty("algorithm") String algorithm,
+            @JsonProperty("inputArray") String inputArray,
+            @JsonProperty("outputArray") String outputArray,
+            @JsonProperty("formattedDuration") String formattedDuration,
+            @JsonProperty("swapCount") int swapCount,
+            @JsonProperty("startTime") String startTime,
+            @JsonProperty("ivalue") int iValue) {
+        this.algorithm = new SimpleStringProperty(algorithm);
+        this.inputArray = new SimpleStringProperty(inputArray);
+        this.outputArray = new SimpleStringProperty(outputArray);
+        this.formattedDuration = new SimpleStringProperty(formattedDuration);
         this.swapCount = new SimpleIntegerProperty(swapCount);
         this.startTime = new SimpleStringProperty(startTime);
         this.iValue = new SimpleIntegerProperty(iValue);
